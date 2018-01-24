@@ -1,8 +1,10 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import fetch from 'node-fetch';
 import './App.css';
 
 import SearchBar from './search_bar'
+import MovieDetail from './movie_detail'
 
 const ROOT_URL = 'https://api.themoviedb.org/3';
 const API_KEY = process.env.REACT_APP_MOVIE_DB_API_KEY;
@@ -20,6 +22,7 @@ class App extends Component {
   }
 
   movieSearch(term) {
+    // Query TMDB API and set state based on returned information
     let query = encodeURI(term);
     fetch(`${ROOT_URL}/search/movie?api_key=${API_KEY}&query=${query}`)
       .then(res => res.json())
@@ -32,10 +35,12 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state);
+    const movieSearch = _.debounce((term) => { this.movieSearch(term) }, 300);
+
     return (
       <div className="App">
-        <SearchBar />
+        <SearchBar onSearchTermChange={movieSearch}/>
+        <MovieDetail movie={this.state.currentMovie}/>
       </div>
     );
   }

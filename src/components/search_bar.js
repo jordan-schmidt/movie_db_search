@@ -19,9 +19,10 @@ class SearchBar extends Component {
   }
 
   onInputChange(term) {
+    //Input is determined by state, not vice versa
+    //Run movie search passed from App component
     this.setState({term});
-    // need to pass function from App level
-    // this.props.onSearchTermChange(term);
+    this.props.onSearchTermChange(term);
   }
 }
 
