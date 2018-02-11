@@ -23,15 +23,23 @@ class App extends Component {
 
   movieSearch(term) {
     // Query TMDB API and set state based on returned information
-    let query = encodeURI(term);
-    fetch(`${ROOT_URL}/search/movie?api_key=${API_KEY}&query=${query}`)
-      .then(res => res.json())
-      .then(resJSON => {
-        this.setState({
-          movies: resJSON.results,
-          currentMovie: resJSON.results[0]
-        });
+    // TODO: handle when user empties search bar
+    if (!term) {
+      this.setState({
+        movies: [],
+        currentMovie: null
       });
+    } else {
+      let query = encodeURI(term);
+      fetch(`${ROOT_URL}/search/movie?api_key=${API_KEY}&query=${query}`)
+        .then(res => res.json())
+        .then(resJSON => {
+          this.setState({
+            movies: resJSON.results,
+            currentMovie: resJSON.results[0]
+          });
+        });
+    }
   }
 
   render() {
